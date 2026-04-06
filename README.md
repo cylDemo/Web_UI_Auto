@@ -244,13 +244,60 @@ jobs:
 | 不稳定率 | < 2% |
 | 代码覆盖率 | >= 80% |
 
+## 分支策略
+
+### 分支类型
+
+| 分支类型 | 命名示例 | 用途 |
+|---------|---------|------|
+| 主分支 | `master` | 生产环境代码，稳定版本 |
+| 开发分支 | `develop` | 开发中的代码，整合功能 |
+| 功能分支 | `feature/login-test` | 新功能开发 |
+| 修复分支 | `fix/assertion-fix` | Bug 修复 |
+| 发布分支 | `release/v1.0` | 版本发布准备 |
+
+### 工作流程
+
+```
+master    ──────────────────────────────────────────► v1.0 ──────────► v1.1
+              ↑                    ↑                    ↑
+              │                    │                    │
+         develop ◄────────────────┘                    │
+              ↑                                       │
+              │                                       │
+         feature/xxx ◄────────────────────────────────┘
+```
+
+### 操作命令
+
+```bash
+# 1. 从 master 创建开发分支
+git checkout master
+git pull origin master
+git checkout -b develop
+
+# 2. 从 develop 创建功能分支
+git checkout -b feature/add-checkout-test
+
+# 3. 开发完成后，合并到 develop
+git checkout develop
+git merge feature/add-checkout-test
+
+# 4. 确认无误后，合并到 master 并打标签
+git checkout master
+git merge develop
+git tag -a v1.0 -m "Release version 1.0"
+git push origin master --tags
+```
+
 ## 贡献指南
 
 1. Fork 本仓库
-2. 创建功能分支
-3. 提交更改
-4. 推送到分支
-5. 创建 Pull Request
+2. 从 `develop` 创建功能分支
+3. 在功能分支上开发
+4. 提交更改
+5. 推送到远程
+6. 创建 Pull Request 到 `develop` 分支
 
 ## 许可证
 
